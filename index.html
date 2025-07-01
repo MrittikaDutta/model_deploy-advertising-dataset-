@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advertising Prediction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      padding: 5px;
+      width: 100px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 8px 15px;
+      font-size: 16px;
+    }
+    #resultBox {
+      margin-top: 20px;
+      padding: 15px;
+      border: 2px solid #4CAF50;
+      border-radius: 5px;
+      background-color: #f9fff9;
+      width: fit-content;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>Enter Advertising Data:</h2>
+  
+  <label>TV:
+    <input type="number" id="TV" value="230.1" />
+  </label>
+  
+  <label>Radio:
+    <input type="number" id="radio" value="37.8" />
+  </label>
+  
+  <label>Newspaper:
+    <input type="number" id="newspaper" value="67" />
+  </label>
+  
+  <button onclick="makePrediction()">Predict</button>
+  
+  <div id="resultBox"></div>
+
+  <script>
+    function makePrediction() {
+      const tv = document.getElementById("TV").value;
+      const radio = document.getElementById("radio").value;
+      const newspaper = document.getElementById("newspaper").value;
+
+      fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          TV: parseFloat(tv),
+          Radio: parseFloat(radio),
+          Newspaper: parseFloat(newspaper),
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        const resultBox = document.getElementById("resultBox");
+        resultBox.innerHTML = `<strong>Predicted Sales:</strong> ${data.prediction[0]}`;
+        resultBox.style.display = "block";
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        const resultBox = document.getElementById("resultBox");
+        resultBox.innerHTML = `<span style="color: red;">Error occurred while predicting.</span>`;
+        resultBox.style.display = "block";
+      });
+    }
+  </script>
+</body>
+</html>
