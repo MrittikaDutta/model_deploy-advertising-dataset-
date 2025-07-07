@@ -1,0 +1,8 @@
+ML-ModelDeployment/
+│
+├── final_model.pkl # Trained regression model (Pickle)
+├── column_names.pkl # List of column names used in training
+├── Advertising.csv # Dataset used for training (optional)
+├── mynewapi.py # Flask backend API
+├── index.html # Frontend HTML + CSS + JS
+└── README.md # This file
