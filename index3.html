@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sales Prediction</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #2bd2b4, #ACB6E5);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      text-align: left;
+      color: #555;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: #74ebd5;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      background: #237f6e;
+      color: #fff;
+      border: none;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #4bbeb3;
+    }
+
+    #predictionResult {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Sales Prediction</h1>
+    <label for="TV">TV Spend ($)</label>
+    <input type="number" id="TV" placeholder="e.g. 230.1" />
+
+    <label for="Radio">Radio Spend ($)</label>
+    <input type="number" id="Radio" placeholder="e.g. 37.8" />
+
+    <label for="Newspaper">Newspaper Spend ($)</label>
+    <input type="number" id="Newspaper" placeholder="e.g. 67" />
+
+    <button onclick="makePrediction()">Predict</button>
+
+    <div id="predictionResult"></div>
+    <div id="errorMessage" class="error"></div>
+  </div>
+
+  <script>
+    function makePrediction() {
+      const tv = document.getElementById("TV").value;
+      const radio = document.getElementById("Radio").value;
+      const newspaper = document.getElementById("Newspaper").value;
+
+      // clear previous result
+      document.getElementById("predictionResult").innerText = "";
+      document.getElementById("errorMessage").innerText = "";
+
+      fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          TV: parseFloat(tv),
+          Radio: parseFloat(radio),
+          Newspaper: parseFloat(newspaper)
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(err => {
+            throw new Error(err.error || "Prediction failed.");
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        document.getElementById("predictionResult").innerText =
+          "Predicted Sales: " + data.prediction;
+      })
+      .catch(error => {
+        console.error(error);
+        document.getElementById("errorMessage").innerText =
+          error.message || "Error occurred while predicting.";
+      });
+    }
+  </script>
+</body>
+</html>
