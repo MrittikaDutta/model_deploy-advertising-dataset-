@@ -1,9 +1,39 @@
 # model_deploy-advertising-dataset-
 
 
+# 📈 Advertising Sales Prediction Web App
 
+This project is a simple machine learning web application that predicts **sales** based on advertising spend on **TV**, **Radio**, and **Newspaper**. It uses a trained regression model and serves predictions via a Flask API. The frontend is built with HTML, CSS, and JavaScript.
 
+---
 
+## 🚀 Features
+
+- 📦 Predict sales from ad budgets
+- 🔗 Flask-based backend API
+- 🌐 User-friendly frontend interface
+- 🎯 Real-time prediction on user input
+- 🧠 Model loaded from pickle files
+
+---
+
+## 🗂️ Project Structure
+
+ML-ModelDeployment/
+│
+├── final_model.pkl # Trained regression model (Pickle)
+├── column_names.pkl # List of column names used in training
+├── Advertising.csv # Dataset used for training (optional)
+├── mn3.py # Flask backend API
+├── index3.html # Frontend HTML + CSS + JS
+└── README.md # This file
+
+## 📊 Model Details
+
+- **Algorithm**: Linear Regression  
+- **Features**: TV, Radio, Newspaper  
+- **Target**: Sales  
+- **Trained with**: Scikit-learn
 
 
 
